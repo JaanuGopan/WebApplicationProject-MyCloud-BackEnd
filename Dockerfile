@@ -1,3 +1,3 @@
 FROM openjdk:17
-ADD target/cloudstoragemanagement-0.0.1-SNAPSHOT.jar cloudstoragemanagement-0.0.1-SNAPSHOT.jar
-ENTRYPOINT ["java", "-jar", "/cloudstoragemanagement-0.0.1-SNAPSHOT.jar"]
+ADD devops-project-backend.jar devops-project-backend.jar
+ENTRYPOINT ["java", "-jar", "/devops-project-backend.jar"]
