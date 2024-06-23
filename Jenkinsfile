@@ -12,6 +12,7 @@ pipeline {
         DB_IMAGE = 'mysql:8.0.35'
         BACKEND_IMAGE = 'webapp-mycloud-backend2'
         FRONTEND_IMAGE = 'webapp-mycloud-frontend2'
+        PATH = /Applications/Docker.app/Contents/Resources/bin/docker:$PATH
     }
 
     stages {
