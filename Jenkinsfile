@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven 3.9.8' // Replace with your configured Maven version
+        git 'Default' // Assuming Git is configured as Default
+    }
+
     environment {
         DB_IMAGE = 'mysql:8.0.35'
         BACKEND_IMAGE = 'webapp-mycloud-backend'
@@ -58,7 +63,7 @@ pipeline {
                           - "3306:3306"
 
                       backend:
-                        image: my-backend
+                        image: ${BACKEND_IMAGE}
                         ports:
                           - "8080:8080"
                         environment:
@@ -69,7 +74,7 @@ pipeline {
                           - db
 
                       frontend:
-                        image: my-frontend
+                        image: ${FRONTEND_IMAGE}
                         ports:
                           - "80:80"
                         depends_on:
