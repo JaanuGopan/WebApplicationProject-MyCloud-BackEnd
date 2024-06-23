@@ -23,7 +23,7 @@ pipeline {
             steps {
                 script {
                     dir('backend') {
-                        sh 'mvn clean package'
+                        sh 'mvn clean install'
                         sh 'docker build -t ${BACKEND_IMAGE} .'
                     }
                 }
