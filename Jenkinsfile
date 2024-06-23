@@ -4,7 +4,7 @@ pipeline {
     tools {
         maven 'Maven3.9.8' // Replace with your configured Maven version
         git 'Default' // Assuming Git is configured as Default
-        dockerTool 'DOCKER_HOME'
+        dockerTool 'Docker25.0.3'
         jdk 'java 21.0.1'
     }
 
@@ -12,7 +12,6 @@ pipeline {
         DB_IMAGE = 'mysql:8.0.35'
         BACKEND_IMAGE = 'webapp-mycloud-backend2'
         FRONTEND_IMAGE = 'webapp-mycloud-frontend2'
-        PATH = "/usr/local/bin/docker:$PATH"
     }
 
     stages {
