@@ -4,6 +4,7 @@ pipeline {
     tools {
         maven 'MAVEN_HOME' // Replace with your configured Maven version
         git 'Default' // Assuming Git is configured as Default
+        dockerTool 'DOCKER_HOME'
     }
 
     environment {
@@ -16,13 +17,16 @@ pipeline {
         stage('Checkout Backend') {
             steps {
                 git url: 'https://github.com/JaanuGopan/WebApplicationProject-MyCloud-BackEnd.git', branch: 'main'
+                sh 'ls -al' // Debugging: List files to ensure checkout
             }
         }
 
         stage('Build Backend') {
             steps {
                 script {
+                    sh 'ls -al'
                     dir('backend') {
+                        sh 'ls -al'
                         sh 'mvn clean install'
                         sh 'docker build -t ${BACKEND_IMAGE} .'
                     }
@@ -33,6 +37,7 @@ pipeline {
         stage('Checkout Frontend') {
             steps {
                 git url: 'https://github.com/JaanuGopan/WebApplicationProject-MyCloud-FrontEnd.git', branch: 'main'
+                sh 'ls -al' // Debugging: List files to ensure checkout
             }
         }
 
