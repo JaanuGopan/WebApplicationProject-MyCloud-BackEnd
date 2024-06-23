@@ -2,9 +2,10 @@ pipeline {
     agent any
 
     tools {
-        maven 'MAVEN_HOME' // Replace with your configured Maven version
+        maven 'Apache Maven 3.9.8' // Replace with your configured Maven version
         git 'Default' // Assuming Git is configured as Default
-        dockerTool 'DOCKER_HOME'
+        dockerTool 'Docker 25.0.3'
+        jdk 'java 21.0.1'
     }
 
     environment {
@@ -33,12 +34,12 @@ pipeline {
                         currentBuild.result = 'FAILURE'
                         error("Docker build failed")
                     }
-
                 }
             }
         }
 
-        /* stage('Checkout Frontend') {
+        /* Uncomment if needed
+        stage('Checkout Frontend') {
             steps {
                 git url: 'https://github.com/JaanuGopan/WebApplicationProject-MyCloud-FrontEnd.git', branch: 'main'
                 sh 'ls -al' // Debugging: List files to ensure checkout
@@ -51,7 +52,8 @@ pipeline {
                     sh 'docker build -t ${FRONTEND_IMAGE} .'
                 }
             }
-        } */
+        }
+        */
 
         stage('Run Docker Compose') {
             steps {
@@ -80,12 +82,13 @@ pipeline {
                         depends_on:
                           - db
 
-                      /* frontend:
-                        image: ${FRONTEND_IMAGE}
-                        ports:
-                          - "80:80"
-                        depends_on:
-                          - backend */
+                      # Uncomment the frontend section if needed
+                      # frontend:
+                      #   image: ${FRONTEND_IMAGE}
+                      #   ports:
+                      #     - "80:80"
+                      #   depends_on:
+                      #     - backend
                     '''
                     sh 'docker-compose up -d'
                 }
