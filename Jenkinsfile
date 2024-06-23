@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven3.9.8' // Replace with your configured Maven version
+        maven 'Maven' // Replace with your configured Maven version
         git 'Default' // Assuming Git is configured as Default
-        dockerTool 'Docker25.0.3'
+        docker 'Docker25.0.3'
         jdk 'java 21.0.1'
     }
 
