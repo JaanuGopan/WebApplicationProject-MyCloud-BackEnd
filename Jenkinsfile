@@ -4,7 +4,7 @@ pipeline {
     tools {
         maven 'Maven3.9.8' // Replace with your configured Maven version
         git 'Default' // Assuming Git is configured as Default
-        dockerTool 'Docker25.0.3'
+        dockerTool 'DOCKER_HOME'
         jdk 'java 21.0.1'
     }
 
