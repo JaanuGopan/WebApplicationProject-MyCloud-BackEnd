@@ -26,13 +26,19 @@ pipeline {
                 script {
                     sh 'ls -al'
                     sh 'mvn clean install'
-                    sh 'docker build -t ${BACKEND_IMAGE} .'
+                    try {
+                        sh 'docker build -t ${BACKEND_IMAGE} .'
+                    } catch (Exception e) {
+                        echo "Docker build failed: ${e}"
+                        currentBuild.result = 'FAILURE'
+                        error("Docker build failed")
+                    }
 
                 }
             }
         }
 
-        stage('Checkout Frontend') {
+        /* stage('Checkout Frontend') {
             steps {
                 git url: 'https://github.com/JaanuGopan/WebApplicationProject-MyCloud-FrontEnd.git', branch: 'main'
                 sh 'ls -al' // Debugging: List files to ensure checkout
@@ -42,12 +48,10 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 script {
-                    dir('frontend') {
-                        sh 'docker build -t ${FRONTEND_IMAGE} .'
-                    }
+                    sh 'docker build -t ${FRONTEND_IMAGE} .'
                 }
             }
-        }
+        } */
 
         stage('Run Docker Compose') {
             steps {
@@ -68,7 +72,7 @@ pipeline {
                       backend:
                         image: ${BACKEND_IMAGE}
                         ports:
-                          - "8080:8080"
+                          - "8081:8080"
                         environment:
                           SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/cloudstoragemanagment
                           SPRING_DATASOURCE_USERNAME: root
@@ -76,12 +80,12 @@ pipeline {
                         depends_on:
                           - db
 
-                      frontend:
+                      /* frontend:
                         image: ${FRONTEND_IMAGE}
                         ports:
                           - "80:80"
                         depends_on:
-                          - backend
+                          - backend */
                     '''
                     sh 'docker-compose up -d'
                 }
