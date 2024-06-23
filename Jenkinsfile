@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven 3.9.8' // Replace with your configured Maven version
+        maven 'MAVEN_HOME' // Replace with your configured Maven version
         git 'Default' // Assuming Git is configured as Default
     }
 
