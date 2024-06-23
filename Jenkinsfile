@@ -28,6 +28,7 @@ pipeline {
                     sh 'ls -al'
                     sh 'mvn clean install'
                     try {
+                        sh 'which docker'
                         sh 'docker build -t ${BACKEND_IMAGE} .'
                     } catch (Exception e) {
                         echo "Docker build failed: ${e}"
