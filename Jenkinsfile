@@ -10,8 +10,8 @@ pipeline {
 
     environment {
         DB_IMAGE = 'mysql:8.0.35'
-        BACKEND_IMAGE = 'webapp-mycloud-backend'
-        FRONTEND_IMAGE = 'webapp-mycloud-frontend'
+        BACKEND_IMAGE = 'webapp-mycloud-backend2'
+        FRONTEND_IMAGE = 'webapp-mycloud-frontend2'
     }
 
     stages {
