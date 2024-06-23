@@ -25,11 +25,9 @@ pipeline {
             steps {
                 script {
                     sh 'ls -al'
-                    dir('backend') {
-                        sh 'ls -al'
-                        sh 'mvn clean install'
-                        sh 'docker build -t ${BACKEND_IMAGE} .'
-                    }
+                    sh 'mvn clean install'
+                    sh 'docker build -t ${BACKEND_IMAGE} .'
+
                 }
             }
         }
