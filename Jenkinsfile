@@ -24,6 +24,13 @@ pipeline {
                 }
             }
         }
+        stage('Docker Login') {
+            steps {
+                script {
+                    sh 'docker login'
+                }
+            }
+        }
 
         stage('Build Backend') {
             steps {
