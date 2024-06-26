@@ -79,16 +79,20 @@ pipeline {
                               MYSQL_USER: root
                               MYSQL_PASSWORD: root
                             ports:
-                              - "3306:3306"
+                              - "3307:3306"
 
                           backend:
                             image: ${BACKEND_IMAGE}
                             ports:
                               - "8081:8080"
                             environment:
-                              SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/cloudstoragemanagment
-                              SPRING_DATASOURCE_USERNAME: root
-                              SPRING_DATASOURCE_PASSWORD: root
+                              MYSQL_HOST: db
+                              MYSQL_PORT: 3307
+                              MYSQL_USER: root
+                              MYSQL_PASSWORD: root
+                             # SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/cloudstoragemanagment
+                             # SPRING_DATASOURCE_USERNAME: root
+                             # SPRING_DATASOURCE_PASSWORD: root
                             depends_on:
                               - db
 
