@@ -32,6 +32,7 @@ pipeline {
                 dir('backend') {
                     script {
                         sh 'mvn clean install'
+                        sh "echo '${DOCKER_PASSWORD}' | docker login -u '${DOCKER_USERNAME}' --password-stdin"
                         try {
                             sh 'docker build -t ${BACKEND_IMAGE} .'
                         } catch (Exception e) {
@@ -98,8 +99,6 @@ pipeline {
                             depends_on:
                               - backend
                         '''
-                        // Login to Docker Hub using credentials
-                        sh "echo '${DOCKER_PASSWORD}' | docker login -u '${DOCKER_USERNAME}' --password-stdin"
                         sh 'docker-compose up -d'
                     }
                 }
