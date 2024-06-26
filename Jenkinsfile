@@ -17,42 +17,48 @@ pipeline {
     stages {
         stage('Checkout Backend') {
             steps {
-                git url: 'https://github.com/JaanuGopan/WebApplicationProject-MyCloud-BackEnd.git', branch: 'main'
-                sh 'ls -al' // Debugging: List files to ensure checkout
+                dir('backend') {
+                    git url: 'https://github.com/JaanuGopan/WebApplicationProject-MyCloud-BackEnd.git', branch: 'main'
+                    sh 'ls -al' // Debugging: List files to ensure checkout
+                }
             }
         }
 
         stage('Build Backend') {
             steps {
-                script {
-                    sh 'mvn clean install'
-                    try {
-                        sh 'docker build -t ${BACKEND_IMAGE} .'
-                    } catch (Exception e) {
-                        echo "Docker build failed: ${e}"
-                        currentBuild.result = 'FAILURE'
-                        error("Docker build failed")
+                dir('backend') {
+                    script {
+                        sh 'mvn clean install'
+                        try {
+                            sh 'docker build -t ${BACKEND_IMAGE} .'
+                        } catch (Exception e) {
+                            echo "Docker build failed: ${e}"
+                            currentBuild.result = 'FAILURE'
+                            error("Docker build failed")
+                        }
                     }
                 }
             }
         }
 
-        /* Uncomment if needed
         stage('Checkout Frontend') {
             steps {
-                git url: 'https://github.com/JaanuGopan/WebApplicationProject-MyCloud-FrontEnd.git', branch: 'main'
-                sh 'ls -al' // Debugging: List files to ensure checkout
+                dir('frontend') {
+                    git url: 'https://github.com/JaanuGopan/WebApplicationProject-MyCloud-FrontEnd.git', branch: 'main'
+                    sh 'ls -al' // Debugging: List files to ensure checkout
+                }
             }
         }
 
         stage('Build Frontend') {
             steps {
-                script {
-                    sh 'docker build -t ${FRONTEND_IMAGE} .'
+                dir('frontend') {
+                    script {
+                        sh 'docker build -t ${FRONTEND_IMAGE} .'
+                    }
                 }
             }
         }
-        */
 
         stage('Run Docker Compose') {
             steps {
@@ -81,13 +87,12 @@ pipeline {
                         depends_on:
                           - db
 
-                      # Uncomment the frontend section if needed
-                      # frontend:
-                      #   image: ${FRONTEND_IMAGE}
-                      #   ports:
-                      #     - "80:80"
-                      #   depends_on:
-                      #     - backend
+                      frontend:
+                        image: ${FRONTEND_IMAGE}
+                        ports:
+                          - "3000:3000"
+                        depends_on:
+                          - backend
                     '''
                     sh 'docker-compose up -d'
                 }
