@@ -26,13 +26,6 @@ pipeline {
                 }
             }
         }
-        stage('Docker Login') {
-            steps {
-                script {
-                    sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
-                }
-            }
-        }
 
         stage('Build Backend') {
             steps {
@@ -105,6 +98,8 @@ pipeline {
                             depends_on:
                               - backend
                         '''
+                        // Login to Docker Hub using credentials
+                        sh "echo '${DOCKER_PASSWORD}' | docker login -u '${DOCKER_USERNAME}' --password-stdin"
                         sh 'docker-compose up -d'
                     }
                 }
