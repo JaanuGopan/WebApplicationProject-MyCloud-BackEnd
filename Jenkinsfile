@@ -64,57 +64,24 @@ pipeline {
             }
         }
 
-        stage('Run Docker Compose') {
+        stage('Deploy with Docker Compose') {
             steps {
-                withEnv(["PATH+DOCKER_COMPOSE=${DOCKER_COMPOSE_PATH}"]) {
-                    script {
-                        writeFile file: 'docker-compose.yml', text: '''
-                        version: '3'
-                        services:
-                          db:
-                            image: mysql:8.0.35
-                            environment:
-                              MYSQL_ROOT_PASSWORD: root
-                              MYSQL_DATABASE: cloudstoragemanagment
-                              MYSQL_USER: root
-                              MYSQL_PASSWORD: root
-                            ports:
-                              - "3307:3306"
-
-                          backend:
-                            image: ${BACKEND_IMAGE}
-                            ports:
-                              - "8081:8080"
-                            environment:
-                              MYSQL_HOST: db
-                              MYSQL_PORT: 3307
-                              MYSQL_USER: root
-                              MYSQL_PASSWORD: root
-                             # SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/cloudstoragemanagment
-                             # SPRING_DATASOURCE_USERNAME: root
-                             # SPRING_DATASOURCE_PASSWORD: root
-                            depends_on:
-                              - db
-
-                          frontend:
-                            image: ${FRONTEND_IMAGE}
-                            ports:
-                              - "3000:3000"
-                            depends_on:
-                              - backend
-                        '''
-                        sh 'docker-compose up -d'
-                    }
+                script {
+                    sh '''
+                    docker-compose down
+                    docker-compose up -d
+                    '''
                 }
             }
         }
+
     }
 
     post {
         always {
-            withEnv(["PATH+DOCKER_COMPOSE=${DOCKER_COMPOSE_PATH}"]) {
+            /* withEnv(["PATH+DOCKER_COMPOSE=${DOCKER_COMPOSE_PATH}"]) {
                 sh 'docker-compose down'
-            }
+            } */
         }
     }
 }

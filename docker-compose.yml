@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  database:
+    image: mysql:8.0.35
+    container_name: myclouddb
+    environment:
+      MYSQL_ROOT_PASSWORD: mycloud
+      MYSQL_DATABASE: cloudstoragemanagment
+      MYSQL_USER: mycloud
+      MYSQL_PASSWORD: mycloud
+    ports:
+      - "3307:3306"
+    networks:
+      - mycloud-net
+
+  backend:
+    image: webapp-mycloud-backend2
+    container_name: mycloud-backend-2
+    ports:
+      - "8081:8080"
+    environment:
+      MYSQL_HOST: database
+      MYSQL_USER: mycloud
+      MYSQL_PASSWORD: mycloud
+      MYSQL_PORT: 3306
+    networks:
+      - mycloud-net
+    depends_on:
+      - database
+
+  frontend:
+    image: webapp-mycloud-frontend2
+    container_name: mycloud-frontend-2
+    ports:
+      - "3000:3000"
+    networks:
+      - mycloud-net
+    depends_on:
+      - backend
+
+networks:
+  mycloud-net:
+    driver: bridge
