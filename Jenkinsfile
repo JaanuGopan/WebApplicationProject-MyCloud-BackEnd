@@ -77,11 +77,11 @@ pipeline {
 
     }
 
-    post {
+    /* post {
         always {
-            /* withEnv(["PATH+DOCKER_COMPOSE=${DOCKER_COMPOSE_PATH}"]) {
+            withEnv(["PATH+DOCKER_COMPOSE=${DOCKER_COMPOSE_PATH}"]) {
                 sh 'docker-compose down'
-            } */
+            }
         }
-    }
+    } */
 }
