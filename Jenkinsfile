@@ -67,10 +67,13 @@ pipeline {
         stage('Deploy with Docker Compose') {
             steps {
                 script {
-                    sh '''
-                    docker-compose down
-                    docker-compose up -d
-                    '''
+                    withEnv(["PATH+DOCKER_COMPOSE=${DOCKER_COMPOSE_PATH}"]) {
+                        sh '''
+                            docker-compose down
+                            docker-compose up -d
+                            '''
+                    }
+
                 }
             }
         }
