@@ -21,7 +21,7 @@ services:
       - "8081:8080"
     environment:
       MYSQL_HOST: myclouddb
-      MYSQL_USER: mycloud
+      MYSQL_USER: myclouddb
       MYSQL_PASSWORD: mycloud
       MYSQL_PORT: 3306
     networks:
