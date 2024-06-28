@@ -98,7 +98,7 @@ pipeline {
                     withEnv(["PATH+DOCKER_COMPOSE=${DOCKER_COMPOSE_PATH}"]) {
                         sh '''
                             docker-compose down
-                            docker-compose --timeout 30s up -d
+                            docker-compose up -d
                             '''
                     }
                     //sh 'docker start mycloud-backend-2 || true'
