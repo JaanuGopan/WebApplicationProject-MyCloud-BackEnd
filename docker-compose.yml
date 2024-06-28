@@ -13,11 +13,6 @@ services:
       - "3307:3306"
     networks:
       - mycloud-net
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
 
   backend:
@@ -38,6 +33,7 @@ services:
       - mycloud-net
     depends_on:
       - database
+    command: ["sh", "-c", "sleep 20 && java -jar /devops-project-backend.jar"]
 
   frontend:
     image: webapp-mycloud-frontend2
