@@ -1,7 +1,7 @@
 FROM openjdk:21
 
 # Install netcat
-RUN apk add --no-cache netcat-openbsd
+#RUN apk add --no-cache netcat-openbsd
 
 # Add the backend application jar
 ADD target/devops-project-backend.jar devops-project-backend.jar
