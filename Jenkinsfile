@@ -15,6 +15,8 @@ pipeline {
         DOCKER_COMPOSE_PATH = '/usr/local/bin'
         DOCKER_CREDENTIAL = credentials('DockerHub')
 
+        BACKEND_CONTAINER_NAME = 'mycloud-backend-2'
+
     }
 
     stages {
@@ -106,6 +108,22 @@ pipeline {
                 }
             }
         }
+
+        stage('Check All Containers Are Running') {
+            steps {
+                script {
+                    sh 'sleep 10'
+                    def isRunning = sh(script: "docker ps -f name=${BACKEND_CONTAINER_NAME} | grep -q ${BACKEND_CONTAINER_NAME}", returnStatus: true)
+                    if (isRunning == 0) {
+                        echo "${BACKEND_CONTAINER_NAME} is already running."
+                    } else {
+                        echo "${BACKEND_CONTAINER_NAME} is not running. Restarting..."
+                        sh "docker start ${BACKEND_CONTAINER_NAME}"
+                    }
+                }
+            }
+        }
+
     }
 
     post {
@@ -114,9 +132,9 @@ pipeline {
             /* withEnv(["PATH+DOCKER_COMPOSE=${DOCKER_COMPOSE_PATH}"]) {
                 sh 'docker-compose down'
             } */
-            script{
+            /* script{
                 sh 'sleep 10 && docker start mycloud-backend-2 || true'
-            }
+            } */
         }
     }
 }
