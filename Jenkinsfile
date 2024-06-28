@@ -77,16 +77,14 @@ pipeline {
                 }
             }
         }
-        stages {
-                stage('Start mycloud-backend-2 Container') {
-                    steps {
-                        script {
-                            // Start the existing Docker container if it's not running
-                            sh 'docker start mycloud-backend-2 || true'
-                        }
-                    }
+        stage('Start mycloud-backend-2 Container') {
+            steps {
+                script {
+                    // Start the existing Docker container if it's not running
+                    sh 'docker start mycloud-backend-2 || true'
                 }
             }
+        }
 
     }
 
