@@ -29,14 +29,14 @@ services:
       MYSQL_HOST: database
       MYSQL_USER: mycloud
       MYSQL_PASSWORD: mycloud
-      MYSQL_PORT: 3307  # MySQL runs on port 3306 inside the container
+      MYSQL_PORT: 3306  # Updated to match internal MySQL port
     networks:
       - mycloud-net
     depends_on:
       database:
         condition: service_healthy
     entrypoint: ["/bin/sh", "-c", "
-      until nc -z database 3307; do
+      until nc -z database 3306; do
         echo 'Waiting for MySQL at database:3306...'
         sleep 2;
       done;
