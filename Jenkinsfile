@@ -16,7 +16,6 @@ pipeline {
         DOCKER_CREDENTIAL = credentials('DockerHub')
 
         BACKEND_CONTAINER_NAME = 'mycloud-backend-2'
-
     }
 
     stages {
@@ -39,7 +38,7 @@ pipeline {
             }
         }
 
-       stage('Docker Login') {
+        stage('Docker Login') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'DockerHub', usernameVariable: 'DOCKER_CREDENTIAL_USR', passwordVariable: 'DOCKER_CREDENTIAL_PSW')]) {
@@ -54,9 +53,10 @@ pipeline {
                 dir('backend') {
                     script {
                         try {
-                            sh 'docker build -t ${BACKEND_IMAGE} .'
-                            sh 'docker tag ${BACKEND_IMAGE} janugopan/mycloud:backend'
-                            //sh 'docker push janugopan/mycloud:backend'
+                            sh "docker build -t ${BACKEND_IMAGE} ."
+                            sh "docker tag ${BACKEND_IMAGE} janugopan/mycloud:backend"
+                            // Uncomment below to push the image to DockerHub
+                            // sh "docker push janugopan/mycloud:backend"
                         } catch (Exception e) {
                             echo "Docker build failed: ${e}"
                             currentBuild.result = 'FAILURE'
@@ -81,9 +81,10 @@ pipeline {
                 dir('frontend') {
                     script {
                         try {
-                            sh 'docker build -t ${FRONTEND_IMAGE} .'
-                            sh 'docker tag ${FRONTEND_IMAGE} janugopan/mycloud:frontend'
-                            //sh 'docker push janugopan/mycloud:frontend'
+                            sh "docker build -t ${FRONTEND_IMAGE} ."
+                            sh "docker tag ${FRONTEND_IMAGE} janugopan/mycloud:frontend"
+                            // Uncomment below to push the image to DockerHub
+                            // sh "docker push janugopan/mycloud:frontend"
                         } catch (Exception e) {
                             echo "Docker build failed: ${e}"
                             currentBuild.result = 'FAILURE'
@@ -101,18 +102,16 @@ pipeline {
                         sh '''
                             docker-compose down
                             docker-compose up -d
-                            '''
+                        '''
                     }
-                    //sh 'docker start mycloud-backend-2 || true'
-                    //sh "docker start webapp-mycloud-backend2 || true"
                 }
             }
         }
 
-        stage('Check All Containers Are Running') {
+        stage('Check and Restart Backend Container') {
             steps {
                 script {
-                    sh 'sleep 10'
+                    sh 'sleep 10' // Wait for Docker services to stabilize
                     def isRunning = sh(script: "docker ps -f name=${BACKEND_CONTAINER_NAME} | grep -q ${BACKEND_CONTAINER_NAME}", returnStatus: true)
                     if (isRunning == 0) {
                         echo "${BACKEND_CONTAINER_NAME} is already running."
@@ -128,12 +127,9 @@ pipeline {
 
     post {
         always {
-            // Clean up Docker Compose
-            /* withEnv(["PATH+DOCKER_COMPOSE=${DOCKER_COMPOSE_PATH}"]) {
-                sh 'docker-compose down'
-            } */
-            script{
-                sh 'sleep 10 && docker start mycloud-backend-2 || true'
+            script {
+                // Clean up Docker Compose
+                sh 'sleep 10 && docker-compose down || true'
             }
         }
     }
