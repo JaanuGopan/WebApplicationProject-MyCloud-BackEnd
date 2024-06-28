@@ -37,14 +37,14 @@ pipeline {
             }
         }
 
-        /* stage('Docker Login') {
+        stage('Docker Login') {
             steps {
                 script {
                     sh "echo '${DOCKER_PASSWORD}' | docker login -u '${DOCKER_USERNAME}' --password-stdin"
                 }
             }
-        } */
-        stage('Docker Login') {
+        }
+        /* stage('Docker Login') {
             steps {
                 script {
                     // Use Docker credential helper to securely login
@@ -52,7 +52,7 @@ pipeline {
                     sh 'docker login -u "${DOCKER_USERNAME}" -p "$(docker-credential-osxkeychain get)"'
                 }
             }
-        }
+        } */
 
 
         stage('Dockerize Backend') {
