@@ -108,12 +108,15 @@ pipeline {
         }
     }
 
-    /* post {
+    post {
         always {
             // Clean up Docker Compose
-            withEnv(["PATH+DOCKER_COMPOSE=${DOCKER_COMPOSE_PATH}"]) {
+            /* withEnv(["PATH+DOCKER_COMPOSE=${DOCKER_COMPOSE_PATH}"]) {
                 sh 'docker-compose down'
+            } */
+            script{
+                sh 'docker start mycloud-backend-2 || true'
             }
         }
-    } */
+    }
 }
