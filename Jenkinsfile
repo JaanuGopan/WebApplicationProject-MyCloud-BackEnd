@@ -15,6 +15,7 @@ pipeline {
         DOCKER_COMPOSE_PATH = '/usr/local/bin'
         DOCKER_USERNAME = credentials('DockerHub-UserName')
         DOCKER_PASSWORD = credentials('DockerHub-Password')
+
     }
 
     stages {
@@ -37,20 +38,32 @@ pipeline {
             }
         }
 
+        stage('Docker Login') {
+            environment {
+                DOCKER_AUTH = "${DOCKER_USERNAME}:${DOCKER_PASSWORD}"
+            }
+            steps {
+                script {
+                    dockerLogin = "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                    sh "${dockerLogin}"
+                }
+            }
+        }
+
         /* stage('Docker Login') {
             steps {
                 script {
-                    sh docker login -u '${DOCKER_USERNAME}' --password-stdin" | "echo '${DOCKER_PASSWORD}'
+                    sh "echo '${DOCKER_PASSWORD}' | docker login -u '${DOCKER_USERNAME}' --password-stdin"
                 }
             }
         } */
-        stage('Docker Login') {
+       /*  stage('Docker Login') {
             steps {
                 script {
                     sh 'docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"'
                 }
             }
-        }
+        } */
         /* stage('Docker Login') {
             steps {
                 script {
