@@ -20,7 +20,7 @@ services:
     ports:
       - "8081:8080"
     environment:
-      MYSQL_HOST: myclouddb
+      MYSQL_HOST: database
       MYSQL_USER: mycloud
       MYSQL_PASSWORD: mycloud
       MYSQL_PORT: 3307
