@@ -53,7 +53,9 @@ pipeline {
                     script {
                         try {
                             sh 'docker build -t ${BACKEND_IMAGE} .'
-                            sh 'docker push ${BACKEND_IMAGE}'  // Push the backend image to Docker Hub
+                            sh 'docker tag ${BACKEND_IMAGE}:backend-tag mycloud:backend-tag'
+                            sh 'docker push janugopan/mycloud:backend'
+                            //sh 'docker push ${BACKEND_IMAGE}'  // Push the backend image to Docker Hub
                         } catch (Exception e) {
                             echo "Docker build failed: ${e}"
                             currentBuild.result = 'FAILURE'
@@ -78,7 +80,9 @@ pipeline {
                 dir('frontend') {
                     script {
                         sh 'docker build -t ${FRONTEND_IMAGE} .'
-                        sh 'docker push ${FRONTEND_IMAGE}'  // Push the frontend image to Docker Hub
+                        sh 'docker tag ${FRONTEND_IMAGE}:frontend-tag mycloud:frontend-tag'
+                        sh 'docker push janugopan/mycloud:frontend'
+                        //sh 'docker push ${FRONTEND_IMAGE}'  // Push the frontend image to Docker Hub
                     }
                 }
             }
