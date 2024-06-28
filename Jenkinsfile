@@ -37,13 +37,13 @@ pipeline {
             }
         }
 
-        stage('Docker Login') {
+        /* stage('Docker Login') {
             steps {
                 script {
                     sh "echo '${DOCKER_PASSWORD}' | docker login -u '${DOCKER_USERNAME}' --password-stdin"
                 }
             }
-        }
+        } */
         /* stage('Docker Login') {
             steps {
                 script {
