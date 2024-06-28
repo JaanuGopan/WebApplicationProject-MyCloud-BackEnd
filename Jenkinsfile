@@ -107,12 +107,12 @@ pipeline {
         }
     }
 
-    post {
+    /* post {
         always {
             // Clean up Docker Compose
             withEnv(["PATH+DOCKER_COMPOSE=${DOCKER_COMPOSE_PATH}"]) {
                 sh 'docker-compose down'
             }
         }
-    }
+    } */
 }
