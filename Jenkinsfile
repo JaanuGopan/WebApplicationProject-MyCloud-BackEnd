@@ -37,7 +37,7 @@ pipeline {
             }
         }
 
-        stage('Docker Login') {
+        /* stage('Docker Login') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'DockerHub', usernameVariable: 'DOCKER_CREDENTIAL_USR', passwordVariable: 'DOCKER_CREDENTIAL_PSW')]) {
@@ -45,16 +45,19 @@ pipeline {
                     }
                 }
             }
-        }
+        } */
 
         stage('Dockerize Backend') {
             steps {
                 dir('backend') {
                     script {
                         try {
-                            sh 'docker build -t ${BACKEND_IMAGE} .'
-                            sh 'docker tag ${BACKEND_IMAGE} janugopan/mycloud:backend'
-                            sh 'docker push janugopan/mycloud:backend'
+                            withDockerRegistry(credentialsId: 'DockerHub') {
+                                sh 'docker build -t ${BACKEND_IMAGE} .'
+                                sh 'docker tag ${BACKEND_IMAGE} janugopan/mycloud:backend'
+                                sh 'docker push janugopan/mycloud:backend'
+                            }
+
                         } catch (Exception e) {
                             echo "Docker build failed: ${e}"
                             currentBuild.result = 'FAILURE'
@@ -79,9 +82,12 @@ pipeline {
                 dir('frontend') {
                     script {
                         try {
-                            sh 'docker build -t ${FRONTEND_IMAGE} .'
-                            sh 'docker tag ${FRONTEND_IMAGE} janugopan/mycloud:frontend'
-                            sh 'docker push janugopan/mycloud:frontend'
+                            withDockerRegistry(credentialsId: 'DockerHub') {
+                                sh 'docker build -t ${FRONTEND_IMAGE} .'
+                                sh 'docker tag ${FRONTEND_IMAGE} janugopan/mycloud:frontend'
+                                sh 'docker push janugopan/mycloud:frontend'
+                            }
+
                         } catch (Exception e) {
                             echo "Docker build failed: ${e}"
                             currentBuild.result = 'FAILURE'
