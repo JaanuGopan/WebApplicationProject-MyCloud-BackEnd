@@ -125,12 +125,12 @@ pipeline {
 
     }
 
-    post {
+    /* post {
         always {
             script {
                 // Clean up Docker Compose
                 sh 'sleep 10 && docker-compose down || true'
             }
         }
-    }
+    } */
 }
