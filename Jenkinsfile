@@ -32,24 +32,26 @@ pipeline {
                 dir('backend') {
                     script {
                         sh 'mvn clean install'
-
                     }
                 }
             }
         }
-        stage('Docker Login'){
-            steps{
-                script{
+
+        stage('Docker Login') {
+            steps {
+                script {
                     sh "echo '${DOCKER_PASSWORD}' | docker login -u '${DOCKER_USERNAME}' --password-stdin"
                 }
             }
         }
-        stage('Dockerize BackEnd'){
-            steps{
-                dir('backend'){
-                    script{
+
+        stage('Dockerize Backend') {
+            steps {
+                dir('backend') {
+                    script {
                         try {
                             sh 'docker build -t ${BACKEND_IMAGE} .'
+                            sh 'docker push ${BACKEND_IMAGE}'  // Push the backend image to Docker Hub
                         } catch (Exception e) {
                             echo "Docker build failed: ${e}"
                             currentBuild.result = 'FAILURE'
@@ -74,6 +76,7 @@ pipeline {
                 dir('frontend') {
                     script {
                         sh 'docker build -t ${FRONTEND_IMAGE} .'
+                        sh 'docker push ${FRONTEND_IMAGE}'  // Push the frontend image to Docker Hub
                     }
                 }
             }
@@ -89,26 +92,17 @@ pipeline {
                             '''
                     }
                     sh 'docker start mycloud-backend-2 || true'
-
                 }
             }
         }
-        /* stage('Start mycloud-backend-2 Container') {
-            steps {
-                script {
-                    // Start the existing Docker container if it's not running
-                    sh 'docker start mycloud-backend-2 || true'
-                }
-            }
-        }  */
-
     }
 
-    /* post {
+    post {
         always {
+            // Clean up Docker Compose
             withEnv(["PATH+DOCKER_COMPOSE=${DOCKER_COMPOSE_PATH}"]) {
                 sh 'docker-compose down'
             }
         }
-    } */
+    }
 }
