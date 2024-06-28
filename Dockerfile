@@ -1,7 +1,7 @@
-FROM openjdk:21
+FROM openjdk:21-alpine
 
 # Install netcat
-RUN apt-get update && apt-get install -y netcat && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache netcat-openbsd
 
 # Add the backend application jar
 ADD target/devops-project-backend.jar devops-project-backend.jar
