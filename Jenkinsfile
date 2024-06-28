@@ -53,8 +53,8 @@ pipeline {
                     script {
                         try {
                             sh 'docker build -t ${BACKEND_IMAGE} .'
-                            //sh 'docker tag ${BACKEND_IMAGE} janugopan/mycloud:backend'
-                            //sh 'docker push janugopan/mycloud:backend'
+                            sh 'docker tag ${BACKEND_IMAGE} janugopan/mycloud:backend'
+                            sh 'docker push janugopan/mycloud:backend'
                         } catch (Exception e) {
                             echo "Docker build failed: ${e}"
                             currentBuild.result = 'FAILURE'
