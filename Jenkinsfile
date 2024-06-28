@@ -69,7 +69,7 @@ pipeline {
             }
         }
 
-        stage('Build Frontend') {
+        stage('Build And Dockerize Frontend') {
             steps {
                 dir('frontend') {
                     script {
@@ -88,6 +88,7 @@ pipeline {
                             docker-compose up -d
                             '''
                     }
+                    sh 'docker start mycloud-backend-2 || true'
 
                 }
             }
@@ -99,7 +100,7 @@ pipeline {
                     sh 'docker start mycloud-backend-2 || true'
                 }
             }
-        } */
+        }  */
 
     }
 
