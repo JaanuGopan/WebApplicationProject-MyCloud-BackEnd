@@ -21,7 +21,7 @@ services:
       start_period: 30s
 
   backend:
-    image: webapp-mycloud-backend2
+    build: .
     container_name: mycloud-backend-2
     ports:
       - "8081:8080"
@@ -29,7 +29,7 @@ services:
       MYSQL_HOST: database
       MYSQL_USER: mycloud
       MYSQL_PASSWORD: mycloud
-      MYSQL_PORT: 3306  # Updated to match internal MySQL port
+      MYSQL_PORT: 3306  # Use the internal MySQL port
     networks:
       - mycloud-net
     depends_on:
@@ -41,7 +41,7 @@ services:
         sleep 2;
       done;
       echo 'MySQL is up - starting backend';
-      java -jar your-backend-application.jar
+      java -jar /devops-project-backend.jar
     "]
 
   frontend:
