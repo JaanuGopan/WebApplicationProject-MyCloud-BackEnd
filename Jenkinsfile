@@ -32,7 +32,22 @@ pipeline {
                 dir('backend') {
                     script {
                         sh 'mvn clean install'
-                        sh "echo '${DOCKER_PASSWORD}' | docker login -u '${DOCKER_USERNAME}' --password-stdin"
+
+                    }
+                }
+            }
+        }
+        stage('Docker Login'){
+            steps{
+                script{
+                    sh "echo '${DOCKER_PASSWORD}' | docker login -u '${DOCKER_USERNAME}' --password-stdin"
+                }
+            }
+        }
+        stage('Dockerize BackEnd'){
+            steps{
+                dir('backend'){
+                    script{
                         try {
                             sh 'docker build -t ${BACKEND_IMAGE} .'
                         } catch (Exception e) {
@@ -77,14 +92,14 @@ pipeline {
                 }
             }
         }
-        stage('Start mycloud-backend-2 Container') {
+        /* stage('Start mycloud-backend-2 Container') {
             steps {
                 script {
                     // Start the existing Docker container if it's not running
                     sh 'docker start mycloud-backend-2 || true'
                 }
             }
-        }
+        } */
 
     }
 
