@@ -115,7 +115,7 @@ pipeline {
                 sh 'docker-compose down'
             } */
             script{
-                sh 'docker start mycloud-backend-2 || true'
+                sh 'sleep 30 && docker start mycloud-backend-2 || true'
             }
         }
     }
