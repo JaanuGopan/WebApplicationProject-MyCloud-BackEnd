@@ -132,9 +132,9 @@ pipeline {
             /* withEnv(["PATH+DOCKER_COMPOSE=${DOCKER_COMPOSE_PATH}"]) {
                 sh 'docker-compose down'
             } */
-            /* script{
+            script{
                 sh 'sleep 10 && docker start mycloud-backend-2 || true'
-            } */
+            }
         }
     }
 }
