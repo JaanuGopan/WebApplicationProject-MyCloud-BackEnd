@@ -101,7 +101,7 @@ pipeline {
                             docker-compose up -d
                             '''
                     }
-                    //sh 'docker start mycloud-backend-2 || true'
+                    sh 'docker start mycloud-backend-2 || true'
                     //sh "docker start webapp-mycloud-backend2 || true"
                 }
             }
