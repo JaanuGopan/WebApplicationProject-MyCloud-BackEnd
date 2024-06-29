@@ -16,6 +16,8 @@ pipeline {
         DOCKER_CREDENTIAL = credentials('DockerHub')
 
         BACKEND_CONTAINER_NAME = 'mycloud-backend-2'
+        FRONTEND_CONTAINER_NAME = 'mycloud-frontend-2'
+        DATABASE_CONTAINER_NAME = 'myclouddb'
     }
 
     stages {
@@ -108,16 +110,28 @@ pipeline {
             }
         }
 
-        stage('Check and Restart Backend Container') {
+        stage('Check and Restart All Containers') {
             steps {
                 script {
                     sh 'sleep 10' // Wait for Docker services to stabilize
-                    def isRunning = sh(script: "docker ps -f name=${BACKEND_CONTAINER_NAME} | grep -q ${BACKEND_CONTAINER_NAME}", returnStatus: true)
-                    if (isRunning == 0) {
-                        echo "${BACKEND_CONTAINER_NAME} is already running."
-                    } else {
-                        echo "${BACKEND_CONTAINER_NAME} is not running. Restarting..."
-                        sh "docker start ${BACKEND_CONTAINER_NAME}"
+
+                    def containers = [
+                        DATABASE_CONTAINER_NAME,
+                        BACKEND_CONTAINER_NAME,
+                        FRONTEND_CONTAINER_NAME
+                    ]
+
+                    containers.each { container ->
+                        def isRunning = sh(script: "docker ps -f name=${container} | grep -q ${container}", returnStatus: true)
+                        if (isRunning == 0) {
+                            echo "${container} is already running."
+                        } else {
+                            echo "${container} is not running. Restarting..."
+                            sh "docker start ${container}"
+                            if(container == DATABASE_CONTAINER_NAME){
+                                sh 'sleep 10'
+                            }
+                        }
                     }
                 }
             }
