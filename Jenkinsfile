@@ -57,7 +57,7 @@ pipeline {
                         try {
                             sh "docker build -t ${BACKEND_IMAGE} ."
                             sh "docker tag ${BACKEND_IMAGE} janugopan/mycloud:backend"
-                            // Uncomment below to push the image to DockerHub
+
                             // sh "docker push janugopan/mycloud:backend"
                         } catch (Exception e) {
                             echo "Docker build failed: ${e}"
@@ -85,7 +85,7 @@ pipeline {
                         try {
                             sh "docker build -t ${FRONTEND_IMAGE} ."
                             sh "docker tag ${FRONTEND_IMAGE} janugopan/mycloud:frontend"
-                            // Uncomment below to push the image to DockerHub
+
                             // sh "docker push janugopan/mycloud:frontend"
                         } catch (Exception e) {
                             echo "Docker build failed: ${e}"
